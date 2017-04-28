@@ -1,0 +1,12 @@
+{
+	"name": "Aegis",
+	"version": "0.0.1",
+	"description": "Early build",
+	"dependencies": 
+	{ 
+		"socket.io": "latest"
+	},
+	
+"author": "Cody Roberts"
+
+}
