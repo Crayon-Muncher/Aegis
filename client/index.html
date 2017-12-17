@@ -28,10 +28,16 @@
 	socket.on('addToChat',function(data){
 		chatText.innerHTML += '<div>' + data + '</div>';
 	});
+	socket.on('evalAnswer',function(data){
+		console.log(data);
+	});
 
 	chatForm.onsubmit = function(e){
 		e.preventDefault();
-		socket.emit('sendMsgToServer',chatInput.value);
+		if(chatInput.value[0] === '/')
+			socket.emit('evalServer',chatInput.value.slice(1));
+			else
+			socket.emit('sendMsgToServer',chatInput.value);
 		chatInput.value = '';
 	}
 
@@ -55,5 +61,20 @@ document.onkeyup = function(event){
 		socket.emit('keyPress',{inputId: 'left',state:false});
 	else if(event.keyCode === 68)
 		socket.emit('keyPress',{inputId: 'right',state:false});
+}
+
+document.onmousedown = function(event) {
+	socket.emit('keyPress',{inputId:'leftmouse',state:true});
+}
+
+document.onmouseup = function(event) {
+	socket.emit('keyPress',{inputId:'leftmouse',state:false});
+}
+
+document.onmousemove = function(event){
+	var x = -250 + event.clientX - 8;
+	var y = -250 + event.clientY - 8;
+	var angle = Math.atan2(y,x) / Math.PI * 180;
+	socket.emit('keyPress',{inputId:'mouseangle',state:angle});
 }
 </script>

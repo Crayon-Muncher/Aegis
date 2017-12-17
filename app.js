@@ -41,12 +41,25 @@ var Player = function(id){
 	self.pressingDown = false;
 	self.pressingLeft = false;
 	self.pressingRight = false;
-	self.maxSpd = Math.floor(10 * Math.random());
+	self.pressingLeftMouse = false;
+	self.mouseAngle = 0;
+	self.maxSpd = Math.floor(30 * Math.random());
 
 	var super_update = self.update;
 	self.update = function() {
 		self.updateSpd();
 		super_update();
+		
+		if(self.pressingLeftMouse){
+			self.shootBullet(self.mouseAngle);
+		}
+
+	}
+	
+	self.shootBullet = function(angle){
+		var b = Bullet(angle);
+		b.x = self.x;
+		b.y = self.y;
 	}
 
 	self.updateSpd = function(){
@@ -81,6 +94,10 @@ Player.onConnect = function(socket){
 			player.pressingLeft = data.state;
 		else if(data.inputId === 'right')
 			player.pressingRight = data.state;
+		else if (data.inputId === 'leftmouse')
+			player.pressingLeftMouse = data.state;
+		else if (data.inputId === 'mouseangle')
+			player.mouseAngle = data.state;
 	});
 }
 
@@ -125,9 +142,6 @@ var Bullet = function(angle){
 Bullet.list = {};
 
 Bullet.update = function(){
-	if(Math.random() < 0.1){
-		Bullet(Math.random()*360);
-	}
 	
 	var pack = [];
 	for(var i in Bullet.list){
@@ -162,6 +176,10 @@ io.sockets.on('connection',function(socket){
 			SOCKET_LIST[i].emit('addToChat',playerName + ': ' + data);
 		}
 	});
+	socket.on('evalServer',function(data){
+		var res = eval(data);
+		socket.emit('evalAnswer',res);
+		});
 });
 
 setInterval(function(){
