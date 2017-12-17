@@ -2,6 +2,8 @@
 	"name": "Aegis",
 	"version": "0.0.1",
 	"description": "Early build",
+	"scripts": {"start":"node ./app.js"
+	},
 	"dependencies": {
 		"express": "^4.16.2",
 		"lodash": "^4.17.4",
