@@ -25,7 +25,7 @@ var Player = function(id){
 		pressingDown: false,
 		pressingLeft: false,
 		pressingRight: false,
-		maxSpd: 10
+		maxSpd: Math.floor(10 * Math.random())
 	}
 	self.updatePosition = function(){
 		if(self.pressingUp)
