@@ -2,11 +2,8 @@
 	"name": "Aegis",
 	"version": "0.0.1",
 	"description": "Early build",
-	"dependencies": 
-	{ 
-		"socket.io": "latest"
+	"dependencies": {
+		"lodash": "^4.17.4"
 	},
-	
-"author": "Cody Roberts"
-
+	"author": "Cody Roberts"
 }
