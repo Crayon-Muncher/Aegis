@@ -1,21 +1,62 @@
-<canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>
-<div id = "chat-text" style="width:500px;height:100px;overflow-y:scroll">
-	<div>Hello!</div>
+<div id ="signDiv">
+	username: <input id="signDiv-username" type="text"></input><br>
+	password: <input id="signDiv-password" type="password"</input>
+	<button id="signDiv-signIn">Sign In</button>
+	<button id="signDiv-signUp">Sign Up</button>
 </div>
 
-<form id="chat-form">
-	<input id="chat-input" type="text" style="width:500px"></input>
-</form>
+<div id="gameDiv" style="display:none;">,
+	<canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>
+	<div id = "chat-text" style="width:500px;height:100px;overflow-y:scroll">
+	<div>Hello!</div>
+	</div>
+
+	<form id="chat-form">
+		<input id="chat-input" type="text" style="width:500px"></input>
+	</form>
+</div>
+
 <script src="client/libs/socket.io.js"></script>
 
 <script>
+	var socket = io();
+
+
+	//sign in
+	var signDiv = document.getElementById('signDiv');
+	var signDivUsername = document.getElementById('signDiv-username');
+	var signDivSignIn = document.getElementById('signDiv-signIn');
+	var signDivSignUp = document.getElementById('signDiv-signUp');
+	var signDivPassword = document.getElementById('signDiv-password');
+
+	signDivSignIn.onclick = function(){
+		socket.emit('signIn',{username:signDivUsername.value,password:signDivPassword.value});
+	}
+
+	signDivSignUp.onclick = function(){
+		socket.emit('signUp',{username:signDivUsername.value,password:signDivPassword.value});
+	}
+	socket.on('signInResponse',function(data){
+		if(data.success){
+			signDiv.style.display = 'none';
+			gameDiv.style.display = 'inline-block';
+		} else
+			alert("Sign-in unsuccessful.");
+	});
+	socket.on('signUpResponse',function(data){
+		if(data.success){
+			alert("Sign-up successful.");
+		} else
+			alert("Sign-up unsuccessful.");
+	});
+
+	//game
 	var chatText = document.getElementById('chat-text');
 	var chatForm = document.getElementById('chat-form');
 	var chatInput = document.getElementById('chat-input');
 	var ctx = document.getElementById("ctx").getContext("2d");
 	ctx.font = '30px Arial';
 	
-	var socket = io();
 	
 	socket.on('newPosition',function(data){
 		ctx.clearRect(0,0,1000,1000);
