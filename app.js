@@ -1,3 +1,25 @@
+//Environment Variables
+require('dotenv').config();
+
+var dbuser = process.env.DBUSERNAME;
+var dbpass = process.env.DBPASSWORD;
+
+//Database connection
+var mongoose = require('mongoose');
+mongoose.connect(`${dbuser}:${dbpass}@ds137110.mlab.com:37110/aegis`)
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('openUri', function(){
+	console.log('Connected to Database');
+});
+
+var accSchema = mongoose.Schema({
+	username: String,
+	password: String,
+});
+
+var account = mongoose.model('Account', accSchema);
+
 var express = require('express');
 var app = express();
 var serv = require('http').Server(app);
@@ -49,13 +71,13 @@ var Player = function(id){
 	self.update = function() {
 		self.updateSpd();
 		super_update();
-		
+
 		if(self.pressingLeftMouse){
 			self.shootBullet(self.mouseAngle);
 		}
 
 	}
-	
+
 	self.shootBullet = function(angle){
 		var b = Bullet(angle);
 		b.x = self.x;
@@ -103,7 +125,7 @@ Player.onConnect = function(socket){
 
 Player.onDisconnect = function(socket){
 	delete Player.list[socket.id];
-	
+
 }
 
 Player.update = function(){
@@ -118,7 +140,7 @@ Player.update = function(){
 		});
 
 	}
-return pack;
+	return pack;
 }
 
 var Bullet = function(angle){
@@ -142,7 +164,7 @@ var Bullet = function(angle){
 Bullet.list = {};
 
 Bullet.update = function(){
-	
+
 	var pack = [];
 	for(var i in Bullet.list){
 		var bullet = Bullet.list[i];
@@ -153,23 +175,55 @@ Bullet.update = function(){
 		});
 
 	}
-return pack;
+	return pack;
 }
 
-var USERS = {
-	"crayons":"admin",
+var isValid = function(data,match){
+	account.find({username:data.username,password:data.password}, function(err, accounts) {
+		if(err){
+			console.log(err);
+			match(false);
+			return;
+		}
+		if(accounts.length > 0) {
+			match(true);
+
+		}else
+			match(false);
+	});
 }
 
-var isValidPassword = function(data){
-	return USERS[data.username] === data.password;
-}
+var addUser = function(data,match){
+	account.find({username: data.username}, function(err, accounts) {
+		if(err){
+			console.log(err);
+			match(false);
+			return;
+		}
 
-var isUsernameTaken = function(data){
-	return USERS[data.username];
-}
+		if(accounts.length > 0) {
+			match(false);
+		}
 
-var addUser = function(data){
-	USERS[data.username] = data.password;
+		else{
+			console.log(err);
+
+			let newAccount = new account({username: data.username, password: data.password});
+
+			newAccount.save(function(err, account) {
+				if(err){
+					console.error(err);
+					match(false);
+					return
+				}
+
+				else{
+
+					match(true);
+				}
+			});
+		}
+	});
 }
 
 var io = require('socket.io')(serv,{});
@@ -181,21 +235,25 @@ io.sockets.on('connection',function(socket){
 
 
 	socket.on('signIn',function(data){
-		if(isValidPassword(data)){
-			Player.onConnect(socket);
-			socket.emit('signInResponse',{success:true});
-		} else {
-			socket.emit('signInResponse',{success:false});
-		}
+		isValid(data, function(success){
+			if(success){	
+				Player.onConnect(socket);
+				socket.emit('signInResponse',{success:true});
+			} else {
+				socket.emit('signInResponse',{success:false});
+			}
+		});
 	});
 
 	socket.on('signUp',function(data){
-		if(isUsernameTaken(data)){
-			socket.emit('signUpResponse',{success:false});
-		} else {
-			addUser(data); 
-			socket.emit('signUpResponse',{success:true});
-		}
+		addUser(data, function(success){ 
+			if(success){
+				socket.emit('signUpResponse',{success:true});
+				console.log("Account Created");
+			}else{
+				socket.emit('signUpResponse',{success:false});
+			}
+		});	
 	});
 
 
@@ -203,7 +261,7 @@ io.sockets.on('connection',function(socket){
 		delete SOCKET_LIST[socket.id];
 		Player.onDisconnect(socket);
 	});
-	
+
 	socket.on('sendMsgToServer',function(data){
 		var playerName = ("" + socket.id).slice(2,7);
 		for(var i in SOCKET_LIST){
@@ -213,7 +271,7 @@ io.sockets.on('connection',function(socket){
 	socket.on('evalServer',function(data){
 		var res = eval(data);
 		socket.emit('evalAnswer',res);
-		});
+	});
 });
 
 setInterval(function(){

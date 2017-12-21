@@ -41,13 +41,13 @@
 			signDiv.style.display = 'none';
 			gameDiv.style.display = 'inline-block';
 		} else
-			alert("Sign-in unsuccessful.");
+			alert("Failed to sign in: Username or Password incorrect.");
 	});
 	socket.on('signUpResponse',function(data){
 		if(data.success){
-			alert("Sign-up successful.");
+			alert("Sign-up successful: You can now log in.");
 		} else
-			alert("Sign-up unsuccessful.");
+			alert("Failed to sign up: Username is taken.");
 	});
 
 	//game
