@@ -69,7 +69,9 @@ var Player = function(id){
 	self.pressingRight = false;
 	self.pressingLeftMouse = false;
 	self.mouseAngle = 0;
-	self.maxSpd = Math.floor(30 * Math.random());
+	self.maxSpd = Math.floor(5 * Math.random());
+	if(self.maxSpd < 2)
+		self.maxSpd = Math.floor(15 * Math.random());
 	self.hp = 10;
 	self.hpMax = 10;
 	self.score = 0;
