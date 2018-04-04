@@ -65,7 +65,9 @@ var Player = function(initPack){
 	self.x = initPack.x;
 	self.y = initPack.y;
 	self.hp = initPack.hp;
+	self.mp = initPack.mp;
 	self.hpMax = initPack.hpMax;
+	self.mpMax = initPack.mpMax;
 	self.score = initPack.score;
 	self.map = initPack.map;
 
@@ -149,6 +151,8 @@ socket.on('update', function(data){
 				p.y = pack.y;
 			if(pack.hp !== undefined)
 				p.hp = pack.hp;
+			if(pack.mp !== undefined)
+				p.mp = pack.mp;
 			if(pack.score !== undefined)
 				p.score = pack.score;
 		}
@@ -204,6 +208,11 @@ var drawHealth = function(){
 	var hpWidth = 50 * Player.list[selfId].hp / Player.list[selfId].hpMax;
 	ctx.fillStyle = 'red';
 	ctx.fillRect(0,5,hpWidth,5);
+}
+var drawMana = function(){
+	var mpWidth = 50 * Player.list[selfId].hp / Player.list[selfId].hpMax;
+	ctx.fillStyle = 'blue';
+	ctx.fillRect(0,5,mpWidth,5);
 }
 
 socket.on('addToChat',function(data){

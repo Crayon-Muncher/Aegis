@@ -72,7 +72,6 @@ var Entity = function(param){
 }
 
 var Player = function(param){
-
 	var self = Entity(param);
 	//self.id = param.id;
 	self.num = "" + Math.floor(10 * Math.random());
@@ -86,7 +85,9 @@ var Player = function(param){
 	if(self.maxSpd < 2)
 		self.maxSpd = Math.floor(15 * Math.random());
 	self.hp = 10;
+	self.mp = 10;
 	self.hpMax = 10;
+	self.mpMax = 10;
 	self.score = 0;
 
 	var super_update = self.update;
@@ -95,7 +96,11 @@ var Player = function(param){
 		super_update();
 
 		if(self.pressingLeftMouse){
-			self.shootBullet(self.mouseAngle);
+			if(self.mp > 0)
+			{
+				self.shootBullet(self.mouseAngle);
+				--self.mp;
+			}
 		}
 
 	}
@@ -132,7 +137,9 @@ var Player = function(param){
 			y:self.y,
 			number:self.number,
 			hp:self.hp,
+			mp:self.mp,
 			hpMax:self.hpMax,
+			mpMax:self.mpMax,
 			score:self.score,
 			map:self.map,
 		};
@@ -144,6 +151,7 @@ var Player = function(param){
 			x:self.x,
 			y:self.y,
 			hp:self.hp,
+			mp:self.mp,
 			score:self.score,
 		};
 	}
