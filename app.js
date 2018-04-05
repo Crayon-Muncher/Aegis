@@ -90,6 +90,14 @@ var Player = function(param){
 	self.mpMax = 10;
 	self.score = 0;
 
+//  MANA REGEN
+	setInterval(function(){
+		if (self.mp < self.mpMax)
+		{
+			self.mp++;
+		}
+	},5000);
+
 	var super_update = self.update;
 	self.update = function() {
 		self.updateSpd();
@@ -99,7 +107,7 @@ var Player = function(param){
 			if(self.mp > 0)
 			{
 				self.shootBullet(self.mouseAngle);
-				--self.mp;
+				self.mp--;
 			}
 		}
 
@@ -336,7 +344,7 @@ var addUser = function(data,match){
 		else{
 			console.log(err);
 
-			let newAccount = new account({username: data.username, password: data.password});
+			var newAccount = new account({username: data.username, password: data.password});
 
 			newAccount.save(function(err, account) {
 				if(err){

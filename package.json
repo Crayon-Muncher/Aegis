@@ -1,17 +1,22 @@
 {
-	"name": "Aegis",
-	"version": "0.0.1",
-	"description": "Early build",
-	"scripts": {
-		"start": "node ./app.js"
-	},
-	"dependencies": {
-		"dotenv": "^4.0.0",
-		"express": "^4.16.2",
-		"lodash": "^4.17.4",
-		"mongoose": "^4.13.7",
-		"nano": "^6.4.2",
-		"socket.io": "^2.0.4"
-	},
-	"author": "Cody Roberts"
+  "name": "Aegis",
+  "version": "0.0.1",
+  "description": "Early build",
+  "scripts": {
+    "start": "node ./app.js"
+  },
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "express": "^4.16.2",
+    "lodash": "^4.17.4",
+    "mongoose": "^4.13.7",
+    "nano": "^6.4.2",
+    "nodejs": "0.0.0",
+    "nodemon": "^1.17.3",
+    "socket.io": "^2.0.4"
+  },
+  "author": "Cody Roberts",
+  "devDependencies": {
+    "nvm": "0.0.4"
+  }
 }

@@ -83,7 +83,11 @@ var Player = function(initPack){
 		   var hpWidth = 50 * self.hp / self.hpMax;
 		   ctx.fillStyle = 'red';
 		   ctx.fillRect(self.x - hpWidth/2,self.y + 35,hpWidth,4);
-		 */
+
+			 var mpWidth = 50 * self.mp / self.mpMax;
+			 ctx.fillStyle = 'blue';
+			 ctx.fillRect(self.x - mpWidth/2,self.y + 35,mpWidth,4);
+		*/
 
 		var width = Img.player.width*2;
 		var height = Img.player.height*2;
@@ -187,6 +191,7 @@ setInterval(function(){
 	drawMap();
 	drawScore();
 	drawHealth();
+	drawMana();
 	for(var i in Player.list)
 		Player.list[i].draw();
 	for(var i in Bullet.list)
@@ -202,7 +207,7 @@ var drawMap = function(){
 
 var drawScore = function(){
 	ctx.fillStyle = 'white';
-	ctx.fillText(Player.list[selfId].score,0,40);
+	ctx.fillText(Player.list[selfId].score,0,55);
 }
 var drawHealth = function(){
 	var hpWidth = 50 * Player.list[selfId].hp / Player.list[selfId].hpMax;
@@ -210,9 +215,9 @@ var drawHealth = function(){
 	ctx.fillRect(0,5,hpWidth,5);
 }
 var drawMana = function(){
-	var mpWidth = 50 * Player.list[selfId].hp / Player.list[selfId].hpMax;
+	var mpWidth = 50 * Player.list[selfId].mp / Player.list[selfId].mpMax;
 	ctx.fillStyle = 'blue';
-	ctx.fillRect(0,5,mpWidth,5);
+	ctx.fillRect(0,15,mpWidth,5);
 }
 
 socket.on('addToChat',function(data){
