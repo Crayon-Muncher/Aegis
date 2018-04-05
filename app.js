@@ -89,6 +89,13 @@ var Player = function(param){
 	self.hpMax = 10;
 	self.mpMax = 10;
 	self.score = 0;
+// HEALTH REGEN
+	setInterval(function(){
+		if (self.hp < self.hpMax)
+		{
+			self.hp++;
+		}
+	},5000);
 
 //  MANA REGEN
 	setInterval(function(){
@@ -96,7 +103,7 @@ var Player = function(param){
 		{
 			self.mp++;
 		}
-	},5000);
+	},3000);
 
 	var super_update = self.update;
 	self.update = function() {
