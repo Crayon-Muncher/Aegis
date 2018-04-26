@@ -74,6 +74,20 @@ var Entity = function(param){
 var Player = function(param){
 	var self = Entity(param);
 	//self.id = param.id;
+
+	//Character Stats
+	//These will eventually be initially determined by class and race
+	//Modified as the character levels up
+	//We're starting with a Barbarian class as the base for now,
+	//He starts with 100 stat points at level 1, this is temporary:
+	self.agi = 15;
+	self.dex = 15;
+	self.str = 25;
+	self.con = 25;
+	self.intl = 10;
+	self.wis = 5;
+	self.cha = 5;
+
 	self.num = "" + Math.floor(10 * Math.random());
 	self.pressingUp = false;
 	self.pressingDown = false;
@@ -81,14 +95,16 @@ var Player = function(param){
 	self.pressingRight = false;
 	self.pressingLeftMouse = false;
 	self.mouseAngle = 0;
-	self.maxSpd = Math.floor(5 * Math.random());
-	if(self.maxSpd < 2)
-		self.maxSpd = Math.floor(15 * Math.random());
-	self.hp = 10;
-	self.mp = 10;
-	self.hpMax = 10;
-	self.mpMax = 10;
+	self.maxSpd = (self.agi + self.dex) - (0.5 * (self.con + self.str));
+	console.log(self.maxSpd);
+	self.hp = self.hpMax;
+	self.mp = self.mpMax;
+	self.hpMax = (self.con + self.str);
+	console.log(self.hpMax);
+	self.mpMax = (self.wis + self.intl);
+	console.log(self.mpMax);
 	self.score = 0;
+
 // HEALTH REGEN
 	setInterval(function(){
 		if (self.hp < self.hpMax)
@@ -203,8 +219,6 @@ Player.onConnect = function(socket){
 		else if (data.inputId === 'mouseangle')
 			player.mouseAngle = data.state;
 	});
-
-
 
 	socket.emit('init',{
 		selfId:socket.id,

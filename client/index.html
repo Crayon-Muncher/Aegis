@@ -1,6 +1,9 @@
-<div id ="signDiv">
+<div id ="signDiv" align = "center">
 	username: <input id="signDiv-username" type="text"></input><br>
 	password: <input id="signDiv-password" type="password"</input>
+</div>
+
+<div id ="buttonDiv" align = "center">
 	<button id="signDiv-signIn">Sign In</button>
 	<button id="signDiv-signUp">Sign Up</button>
 </div>
@@ -8,7 +11,7 @@
 <div id="gameDiv" style="display:none;">
 	<canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>
 	<div id = "chat-text" style="width:500px;height:100px;overflow-y:scroll">
-		<div>Welcome to Hrafnaguð Online</div>
+		<div>Welcome to Jingu Bang Online</div>
 	</div>
 
 	<form id="chat-form">
@@ -23,6 +26,8 @@ var WIDTH = 500;
 var HEIGHT = 500;
 var socket = io();
 
+document.body.style.backgroundImage = "url('https://i.imgur.com/smBfIl5.jpg')";
+document.body.style.backgroundSize = "cover";
 
 //sign in
 var signDiv = document.getElementById('signDiv');
@@ -38,9 +43,11 @@ signDivSignIn.onclick = function(){
 signDivSignUp.onclick = function(){
 	socket.emit('signUp',{username:signDivUsername.value,password:signDivPassword.value});
 }
+
 socket.on('signInResponse',function(data){
 	if(data.success){
 		signDiv.style.display = 'none';
+		buttonDiv.style.display = 'none';
 		gameDiv.style.display = 'inline-block';
 	} else
 		alert("Failed to sign in: Username or Password incorrect.");
