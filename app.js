@@ -96,13 +96,10 @@ var Player = function(param){
 	self.pressingLeftMouse = false;
 	self.mouseAngle = 0;
 	self.maxSpd = (self.agi + self.dex) - (0.5 * (self.con + self.str));
-	console.log(self.maxSpd);
+	self.hpMax = (self.con + self.str);
+	self.mpMax = (self.wis + self.intl);
 	self.hp = self.hpMax;
 	self.mp = self.mpMax;
-	self.hpMax = (self.con + self.str);
-	console.log(self.hpMax);
-	self.mpMax = (self.wis + self.intl);
-	console.log(self.mpMax);
 	self.score = 0;
 
 // HEALTH REGEN
@@ -117,7 +114,7 @@ var Player = function(param){
 	setInterval(function(){
 		if (self.mp < self.mpMax)
 		{
-			self.mp++;
+			self.mp+=(self.wis % 2);
 		}
 	},3000);
 
